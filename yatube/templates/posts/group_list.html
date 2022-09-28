@@ -1,0 +1,37 @@
+<!-- templates/posts/group_list.html -->
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% block title %}
+  <title>{{ group.title }}</title>
+{% endblock %}
+{% block content %}
+  <main>
+    <div class="container py-5">
+      <h1>Группа {{ group.title }}</h1>
+      <p>{{group.description|linebreaksbr}}</p>
+      <br>
+      <article>
+        {% for post in page_obj %}
+          <ul>
+            <li>
+              Автор: <a style="text-decoration: none" href="{% url 'posts:profile' post.author.username %}">{{ post.author.get_full_name }}</a>
+            </li>
+            <li>
+              Дата публикации: {{ post.pub_date|date:"d E Y" }}
+            </li>
+            {% if post.group %}
+              <li>
+                Группа: <a style="text-decoration: none" href="{% url 'posts:group_posts' post.group.slug %}">{{ post.group }}</a>
+              </li>
+            {% endif %}
+          </ul>
+          {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+            <a href="{% url 'posts:post_detail' post.pk %}"><img class="card-img my-2" src="{{ im.url }}"></a>
+          {% endthumbnail %}
+          <p><a class="nav-link link-dark" href="{% url 'posts:post_detail' post.pk%}">{{ post.text }}</a></p>
+          {% if not forloop.last %}<hr>{% endif %}
+        {% endfor %}
+      </article>
+    </div>
+  </main>
+{% endblock %}

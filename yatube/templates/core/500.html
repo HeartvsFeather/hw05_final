@@ -1,0 +1,14 @@
+<!-- templates/core/404.html -->
+{% extends 'base.html' %}
+{% block title %}
+  <title>Ошибка 500</title>
+{% endblock %}
+{% block content %}
+  <main>
+    <div class="container py-5">
+      <h1>Ошибка 500</h1>
+      <br>
+      <a style="text-decoration: none" href="{% url 'posts:index' %}">На главную</a>
+    </div>
+  </main>
+{% endblock %}
