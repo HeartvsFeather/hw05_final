@@ -1,16 +1,16 @@
-import shutil
-import tempfile
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.core.cache import cache
 from django.urls import reverse
+
+import shutil
+import tempfile
+
 from posts.models import Group, Post, User
 
-TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
-
-@override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
+@override_settings(MEDIA_ROOT=tempfile.mkdtemp(dir=settings.BASE_DIR))
 class ImageTests(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -51,11 +51,15 @@ class ImageTests(TestCase):
         cls.post_create = 'posts:post_create'
         cls.img_way = 'posts/test.gif'
         cls.img_way_two = 'posts/test_two.gif'
+        cls.temp_media_root = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
     @classmethod
     def tearDownClass(cls) -> None:
         super().tearDownClass()
-        shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
+        shutil.rmtree(
+            tempfile.mkdtemp(dir=settings.BASE_DIR),
+            ignore_errors=True
+        )
 
     def setUp(self) -> None:
         self.client = Client()

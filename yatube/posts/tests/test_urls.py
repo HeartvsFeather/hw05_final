@@ -1,6 +1,8 @@
-from http import HTTPStatus
 from django.core.cache import cache
 from django.test import Client, TestCase
+
+from http import HTTPStatus
+
 from posts.models import Group, Post, User
 
 
@@ -8,9 +10,7 @@ class PostURLTests(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
-        # Post author
         cls.author = User.objects.create_user(username='test_name')
-        # Not post author
         cls.user = User.objects.create_user(username='test_name_two')
         cls.group = Group.objects.create(
             title='test_title',

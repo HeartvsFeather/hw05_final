@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import Comment, Group, Post, Follow, User
+
+from .models import Group, Post, Follow, User
 from .forms import CommentForm, PostForm
 from .paginator import paginator
 
@@ -28,7 +29,7 @@ def index(request):
 def profile(request, username):
     template = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
-    post_list = author.author.select_related('group', 'author').all()
+    post_list = author.author.all()
     follow_status = False
     if request.user.is_authenticated:
         if Follow.objects.filter(author=author, user=request.user).exists():
@@ -45,7 +46,7 @@ def post_detail(request, post_id):
     template = 'posts/post_detail.html'
     post = get_object_or_404(Post, pk=post_id)
     form = CommentForm(request.POST or None)
-    comments = Comment.objects.filter(post_id=post_id)
+    comments = post.comment.all()
     counter = Post.objects.filter(author=post.author).count
     context = {
         'post': post,
@@ -57,7 +58,7 @@ def post_detail(request, post_id):
 
 
 @login_required
-def post_creat(request):
+def post_create(request):
     template = 'posts/create_post.html'
     if request.method == 'POST':
         form = PostForm(request.POST or None, files=request.FILES or None)
@@ -139,5 +140,6 @@ def profile_follow(request, username):
 @login_required
 def profile_unfollow(request, username):
     author = get_object_or_404(User, username=username)
-    author.following.filter(user=request.user).delete()
+    if Follow.objects.filter(author=author, user=request.user).exists():
+        author.following.filter(user=request.user).delete()
     return redirect('posts:profile', username=username)
