@@ -11,6 +11,7 @@ from django.urls import path
 
 from . import views
 
+
 app_name = 'users'
 
 pas_change = 'users/password_change_form.html'

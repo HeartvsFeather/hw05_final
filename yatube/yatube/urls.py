@@ -3,6 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
 
+
 app_name = 'posts'
 handler404 = 'core.views.page_not_found'
 handler403 = 'core.views.forbidden'

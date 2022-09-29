@@ -3,6 +3,16 @@ from django.contrib import admin
 from .models import Group, Post, Comment, Follow
 
 
+class GroupAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk',
+        'title',
+        'description',
+    )
+    search_fields = ('title',)
+    empty_value_display = '-пусто-'
+
+
 class PostAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
@@ -39,7 +49,7 @@ class FollowAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-admin.site.register(Group)
+admin.site.register(Group, GroupAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Follow, FollowAdmin)
